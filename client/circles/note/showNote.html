@@ -1,0 +1,46 @@
+<template name="showNote">
+    {{#with note}}
+    <div class="row noteView">
+        <button class="btn btn-link btnBack"><i class="fas fa-backward"></i> Zurück</button>
+        <div class="col-12 row pictures">
+            {{#each pictures}}
+            <div class="col-12 col-sm-4 col-md-3 col-lg-2 pictureContainer">
+                <img src="{{src}}" class="rounded col-12 clickable thumbnail" data-idx="{{@index}}" />
+            </div>
+            {{/each}}
+        </div>
+        <div class="col-12 col-sm-9 col-md-9 col-lg-9">
+            <div class="text-muted">{{formattedDate createdAt}}</div>
+            <h4>{{title}}</h4>
+            <div>{{{description}}}</div>
+        </div>
+        <div class="col-12 col-sm-3 col-md-3 col-lg-3 text-muted note-info" style="word-break: break-word">
+            {{#if price}}
+            <span class="price">Preis: {{price}}</span><br />
+            {{/if}} {{#if contact}} Kontakt: {{contact}}<br />
+            {{/if}} {{#each tags}}
+            <span class="badge badge-pill badge-primary clickable">{{.}}</span>
+            {{/each}}
+            <br /><br />
+            <button class="btn btn-primary btnContact">Kontaktieren</button>
+            {{#if isAdmin}}
+            <button class="btn btn-primary btnEditNote">Bearbeiten</button>
+            {{/if}}
+        </div>
+    </div>
+    {{#if pictureOverlayActive}} {{>pictureOverlay}} {{/if}} {{else}} {{> loading}} {{/with}}
+</template>
+
+<template name="pictureOverlay">
+    <div class="pictureOverlay">
+        {{#with selectedPicture}}
+        <div class="pictureControls">
+            <div class="btn btn-link btn-last"><i class="fas fa-backward"></i> Vorheriges Bild</div>
+            {{idx}}/{{count}}
+            <div class="btn btn-link btn-next"><i class="fas fa-forward"></i> Nächstes Bild</div>
+            <div class="btn btn-link btn-close"><i class="fas fa-times"></i> Schließen</div>
+        </div>
+        <img src="{{img.src}}" class="rounded col-12" />
+        {{/with}}
+    </div>
+</template>

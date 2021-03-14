@@ -1,0 +1,36 @@
+.noteView {
+    .price {
+        font-weight: bold;
+    }
+    .pictures {
+        margin: 0 0 13px 0;
+        padding: 0;
+        .pictureContainer {
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    .note-info {
+        background: lighten($color: #ffd200, $amount: 30);
+        border-radius: 5px;
+        padding: 10px;
+    }
+}
+
+.pictureOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #ffffffee;
+    text-align: center;
+    animation: fadeIn 500ms ease-in-out;
+    img {
+        max-height: calc(100% - 100px);
+        max-width: 100%;
+        width: auto;
+    }
+}

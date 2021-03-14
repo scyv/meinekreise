@@ -1,0 +1,47 @@
+<template name="notes">
+    <button type="button" class="btn btn-default btn-create-note">
+        <i class="fas fa-plus-circle"></i> Neue Notiz erstellen
+    </button>
+    <div class="notes">
+        {{#if readyLoading}} {{> search}}
+        <div id="circles">{{circles}}</div>
+        <div>
+            {{#each notes}} {{>note}} {{else}}
+            <div class="text-center">Keine Notizen vorhanden.</div>
+            {{/each}}
+        </div>
+        {{else}} {{> loading}} {{/if}}
+    </div>
+</template>
+
+<template name="note">
+    <div class="row note">
+        <div class="col-12 col-sm-2 col-md-2 col-lg-2 noteImage">
+            <img src="{{firstPicture}}" class="clickable" />
+        </div>
+        <div class="col-12 col-sm-8 col-md-8 col-lg-8">
+            <div class="text-muted">{{formattedDate createdAt}}</div>
+            <h4 class="clickable title">{{title}}</h4>
+            <div>{{shortDescription}}</div>
+        </div>
+        <div class="col-12 col-sm-2 col-md-2 col-lg-2"></div>
+    </div>
+</template>
+
+<template name="search">
+    <div class="form-group">
+        <div class="input-group">
+            <input
+                type="text"
+                id="searchNote"
+                class="form-control"
+                placeholder="Hier Ihre Suche eingeben"
+                aria-label="Hier Ihre Suche eingeben"
+                aria-describedby="searchNote_addon"
+            />
+            <div class="input-group-append">
+                <span class="input-group-text clickable" id="searchNote_addon"><i class="fas fa-search"></i></span>
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,57 @@
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: arial;
+}
+
+.navbar {
+    background-color: #1a76c5;
+    color: #fff;
+    a {
+        color: #fff;
+    }
+
+    .navbar-nav {
+        .dropdown-menu {
+            right: 0;
+            left: auto;
+        }
+    }
+}
+
+.content {
+    padding: 10px;
+}
+
+.notePicturesPreview {
+    margin: 10px 0 10px 0;
+
+    .thumbnailContainer {
+        margin-bottom: 10px;
+        cursor: move;
+    }
+}
+
+.sortable-ghost {
+    background: #feffca;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+@media (max-width: 576px) {
+    .head {
+        text-align: center;
+    }
+    .notePicturesPreview .thumbnailContainer {
+        text-align: center;
+    }
+}

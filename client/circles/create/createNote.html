@@ -1,0 +1,162 @@
+<template name="createNote">
+    <h4>Neuen Artikel einstellen</h4>
+    <form>
+        <div class="form-group">
+            <label for="noteTitle">Titel</label>
+            <input
+                type="text"
+                class="form-control {{checkValid 'title'}}"
+                id="noteTitle"
+                aria-describedby="noteTitleHelp"
+                maxlength="100"
+            />
+            <div class="invalid-feedback">Bitte gib einen Titel an.</div>
+            <small id="noteTitleHelp" class="form-text text-muted">Gib dem Artikel einen aussagekräftigen Titel.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="notePictures">Bilder</label>
+            <div class="custom-file">
+                <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    class="custom-file-input"
+                    id="notePictures"
+                    aria-describedby="notePicturesHelp"
+                />
+                <label class="custom-file-label" for="notePictures">Bild auswählen</label>
+            </div>
+            <small id="notePicturesHelp" class="form-text text-muted"
+                >Lade hier eines oder mehrere Bilder des Artikels hoch (maximal 5 Bilder)</small
+            >
+            <div class="notePicturesPreview clearfix"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="noteText">Beschreibung</label>
+            <textarea
+                rows="15"
+                class="form-control {{checkValid 'text'}}"
+                id="noteText"
+                aria-describedby="noteTextHelp"
+                maxlength="4000"
+            ></textarea>
+            <div class="invalid-feedback">
+                Bitte gib eine kurze Beschreibung an. Sie hilft anderen, sich ein besseres Bild von dem Artikel zu
+                machen.
+            </div>
+            <small id="noteTextHelp" class="form-text text-muted"
+                >Beschreibe den Artikel in wenigen kurzen Sätzen.</small
+            >
+        </div>
+        <div class="form-group">
+            <label for="noteTags">Kategorien</label>
+            <input
+                type="text"
+                class="form-control"
+                id="noteTags"
+                aria-describedby="noteTagsHelp"
+                placeholder="z.B. Kinderkleidung, 50-68"
+                maxlength="100"
+            />
+            <small id="noteTagsHelp" class="form-text text-muted"
+                >Kategorisiere den Artikel, damit er besser gefunden wird (kommaseparierte Werte).</small
+            >
+            <div id="noteTagsProposals">
+                Kategorievorschläge (Klicken): {{#each allTags}}
+                <span class="badge badge-pill badge-primary clickable">{{name}}</span>
+                {{/each}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="notePrice">Preis</label>
+            <div class="input-group">
+                <input
+                    type="text"
+                    id="notePrice"
+                    class="form-control"
+                    placeholder=""
+                    aria-label="Preis"
+                    aria-describedby="notePrice_addon"
+                    maxlength="10"
+                />
+                <div class="input-group-append">
+                    <span class="input-group-text" id="notePrice_addon">€</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="noteContact">Kontakt (optional)</label>
+            <input
+                type="text"
+                class="form-control"
+                id="noteContact"
+                aria-describedby="noteContactHelp"
+                maxlength="250"
+            />
+            <small id="noteContactHelp" class="form-text text-muted"
+                >Wie können Dich andere kontaktieren? (Email oder Telefonnummer). Diese Information ist öffentlich! Wenn
+                hier keine Angabe gemacht wird, besteht die Möglichkeit, über einen "Kontaktieren" Button beim Artikel
+                in Kontakt zu treten. Es wird dann keine Emailadresse übertragen. Nur Du entscheidest, ob Du Deine
+                Identität preisgibst.</small
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="noteEmail">Email Adresse</label>
+            <input
+                type="text"
+                class="form-control {{checkValid 'email'}}"
+                id="noteEmail"
+                aria-describedby="noteEmailHelp"
+                maxlength="250"
+            />
+            <div class="invalid-feedback">
+                Deine Email Adresse wird (ausschließlich) benötigt, um den Bearbeitungslink und Benachrichtigungen zu
+                dem Artikel zu senden.
+            </div>
+            <small id="noteEmailHelp" class="form-text text-muted"
+                >An diese Email-Adresse senden wir den Link für die Bearbeitung des Artikels. Die Adresse wird
+                ausschließlich intern für Benachrichtigungen zu diesem Artikel verwendet und niemals öffentlich
+                angezeigt oder weitergegeben.</small
+            >
+        </div>
+
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input clickable {{checkValid 'legal'}}" id="legalCheck" required />
+            <label class="form-check-label clickable" for="legalCheck">
+                Ich habe die <a href="/datenschutz" target="_blank">Datenschutzerklärung</a> zur Kenntnis genommen und
+                bin mit den <a href="/nutzungsbedingungen" target="_blank">Nutzungsbedingungen</a> einverstanden.
+            </label>
+            <div class="invalid-feedback">
+                Bitte bestätige, dass Du Datenschutz und Nutzungbedingungen gelesen hast und damit einverstanden bist.
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-create-note">Artikel einstellen</button>
+        <button type="button" class="btn btn-danger btn-cancel">Abbrechen</button>
+    </form>
+
+    <div class="modal fade" id="dlgCreated" tabindex="-1" aria-labelledby="dlgCreatedLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dlgCreatedLabel">Artikel erstellt</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Der Artikel "{{title}}" wurde erstellt. Du solltest eine Email mit der Bestätigung und einem Link
+                    zur Bearbeitung des Artikels bekommen haben an <strong>{{email}}</strong>.<br />
+                    Manchmal landen diese Emails im Spam Ordner, bitte sieh auch dort nach. <br /><br />
+                    Viel Erfolg!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

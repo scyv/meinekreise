@@ -1,0 +1,186 @@
+<template name="editNote">
+    {{#if readyLoading}} {{#with note}}
+    <h4>Artikel bearbeiten</h4>
+    <form>
+        {{#if deactivated}}
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Artikel deaktiviert!</h4>
+            <p>
+                Dieser Artikel ist deaktiviert, weil er bereits seit 6 Wochen angeboten wird. Falls der Artikel
+                weiterhin angeboten werden soll, bitte auf "Wieder aktivieren" klicken.<br />
+                Falls der Artikel weitere zwei Wochen nicht aktiviert wird, wird der Artikel und alle zugehörigen Daten
+                endgültig am <strong>{{formattedDate deletionDate}}</strong> gelöscht.
+            </p>
+            <button type="button" class="btn btn-primary btn-reactivate">Wieder aktivieren</button>
+        </div>
+        {{/if}}
+        <div class="form-group">
+            <label for="noteTitle">Titel</label>
+            <input
+                type="text"
+                value="{{title}}"
+                class="form-control {{checkValid 'title'}}"
+                id="noteTitle"
+                aria-describedby="noteTitleHelp"
+                maxlength="100"
+            />
+            <div class="invalid-feedback">Bitte gib einen Titel an.</div>
+            <small id="noteTitleHelp" class="form-text text-muted">Gib dem Artikel einen aussagekräftigen Titel.</small>
+        </div>
+
+        {{#if category 'biete'}}
+        <div class="form-group">
+            <label for="notePictures">Bilder</label>
+            <div class="custom-file">
+                <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    class="custom-file-input"
+                    id="notePictures"
+                    aria-describedby="notePicturesHelp"
+                />
+                <label class="custom-file-label" for="notePictures">Bild auswählen</label>
+            </div>
+            <small id="notePicturesHelp" class="form-text text-muted"
+                >Lade hier eines oder mehrere Bilder des Artikels hoch</small
+            >
+            <div class="notePicturesPreview clearfix">
+                {{#each pictures}}
+                <div class="thumbnailContainer">
+                    <img src="{{src}}" alt="{{name}}" class="col-12 col-sm-6 col-md-4 col-lg-3" />
+                    <button class="btn btn-link btn-removethumbnail"><i class="fas fa-trash-alt"></i> Löschen</button>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+        {{/if}}
+
+        <div class="form-group">
+            <label for="noteText">Beschreibung</label>
+            <textarea
+                rows="15"
+                class="form-control {{checkValid 'text'}}"
+                id="noteText"
+                aria-describedby="noteTextHelp"
+                maxlength="4000"
+            >
+{{description}}</textarea
+            >
+            <div class="invalid-feedback">
+                Bitte gib eine kurze Beschreibung an. Sie hilft anderen, sich ein besseres Bild von dem Artikel zu
+                machen.
+            </div>
+            <small id="noteTextHelp" class="form-text text-muted"
+                >Beschreibe den Artikel in wenigen kurzen Sätzen.</small
+            >
+        </div>
+        <div class="form-group">
+            <label for="noteTags">Kategorien</label>
+            <input
+                type="text"
+                class="form-control"
+                id="noteTags"
+                aria-describedby="noteTagsHelp"
+                placeholder="z.B. Kinderkleidung, 50-68"
+                value="{{tagValue}}"
+                maxlength="100"
+            />
+            <small id="noteTagsHelp" class="form-text text-muted"
+                >Kategorisiere den Artikel, damit er besser gefunden wird (kommaseparierte Werte).</small
+            >
+            <div id="noteTagsProposals">
+                Kategorievorschläge (Klicken): {{#each allTags}}
+                <span class="badge badge-pill badge-primary clickable">{{name}}</span>
+                {{/each}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="notePrice">Preis</label>
+            <div class="input-group">
+                <input
+                    type="text"
+                    value="{{price}}"
+                    id="notePrice"
+                    class="form-control"
+                    placeholder=""
+                    aria-label="Preis"
+                    aria-describedby="notePrice_addon"
+                    maxlength="10"
+                />
+                <div class="input-group-append">
+                    <span class="input-group-text" id="notePrice_addon">€</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="noteContact">Kontakt (optional)</label>
+            <input
+                type="text"
+                value="{{contact}}"
+                class="form-control"
+                id="noteContact"
+                aria-describedby="noteContactHelp"
+                maxlength="250"
+            />
+            <small id="noteContactHelp" class="form-text text-muted"
+                >Wie können Dich andere kontaktieren? (Email oder Telefonnummer). Diese Information ist öffentlich! Wenn
+                hier keine Angabe gemacht wird, besteht die Möglichkeit, über einen "Kontaktieren" Button beim Artikel
+                in Kontakt zu treten. Es wird dann keine Emailadresse übertragen. Nur Du entscheidest, ob Du Deine
+                Identität preisgibst.</small
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="noteEmail">Email Adresse</label>
+            <input
+                type="text"
+                value="{{email}}"
+                class="form-control {{checkValid 'email'}}"
+                id="noteEmail"
+                aria-describedby="noteEmailHelp"
+                maxlength="250"
+            />
+            <div class="invalid-feedback">
+                Deine Email Adresse wird benötigt, um den Bearbeitungslink und Benachrichtigungen zu senden.
+            </div>
+            <small id="noteEmailHelp" class="form-text text-muted"
+                >An diese Email-Adresse senden wir den Link für die Bearbeitung des Artikels. Die Adresse wird
+                ausschließlich intern für Benachrichtigungen zu diesem Artikel verwendet und niemals öffentlich
+                angezeigt oder weitergegeben.</small
+            >
+        </div>
+
+        <button type="button" class="btn btn-primary btn-save-note">Artikel speichern</button>
+        <button type="button" class="btn btn-danger btn-cancel">Abbrechen</button>
+        <button type="button" class="btn btn-link btn-delete float-right">Artikel löschen</button>
+    </form>
+    {{> dlgConfirmDelete}} {{else}}
+    <div class="alert alert-danger" role="alert">Dieser Artikel existiert nicht mehr</div>
+    {{/with}} {{else}} {{> loading}} {{/if}}
+</template>
+
+<template name="dlgConfirmDelete">
+    <div class="modal" id="dlgConfirmDelete" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Wirklich löschen?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Soll der Artikel wirklich gelöscht werden? Alle Daten des Artikels werden unwiederbringlich
+                        gelöscht!
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbruch</button>
+                    <button type="button" class="btn btn-danger btn-remove-note">Jetzt Löschen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,30 @@
+<template name="login">
+    <p class="lead">Melden Sie sich an um Ihre Kreise zu sortieren.</p>
+    <form>
+        <div class="form-group">
+            <label for="inpUsername">Benutzername</label>
+            <input
+                type="email"
+                class="form-control"
+                id="inpUsername"
+                aria-describedby="userNameHelp"
+                placeholder="Benutzername"
+                autocomplete="username"
+            />
+            <small id="userNameHelp" class="form-text text-muted">Dies ist Ihr Benutzername.</small>
+        </div>
+        <div class="form-group">
+            <label for="inpPassword">Passwort</label>
+            <input
+                type="password"
+                class="form-control"
+                id="inpPassword"
+                placeholder="Passwort"
+                autocomplete="current-password"
+            />
+        </div>
+
+        <button type="button" class="btn btn-primary btnLogin">Login</button> oder
+        <button type="button" class="btn btn-secondary btnCreateAccount">Account anlegen</button>
+    </form>
+</template>

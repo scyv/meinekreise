@@ -1,0 +1,23 @@
+.notes {
+    margin-top: 20px;
+
+    .note {
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px #eaeaea solid;
+        .title:hover {
+            color: #0000ff;
+        }
+
+        .noteImage {
+            padding-right: 0;
+            img {
+                max-width: 100%;
+                width: 100%;
+                max-width: 200px;
+                height: 100px;
+                object-fit: cover;
+            }
+        }
+    }
+}
